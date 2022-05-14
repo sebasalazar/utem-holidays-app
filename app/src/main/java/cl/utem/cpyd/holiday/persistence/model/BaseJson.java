@@ -1,4 +1,4 @@
-package cl.utem.cpyd.holiday.api.vo;
+package cl.utem.cpyd.holiday.persistence.model;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import org.apache.commons.lang3.builder.ReflectionToStringBuilder;

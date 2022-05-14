@@ -1,5 +1,6 @@
 package cl.utem.cpyd.holiday.api.vo;
 
+import cl.utem.cpyd.holiday.persistence.model.BaseJson;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class LeyFLVO extends BaseJson {

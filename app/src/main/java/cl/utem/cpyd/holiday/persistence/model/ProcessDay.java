@@ -1,6 +1,5 @@
 package cl.utem.cpyd.holiday.persistence.model;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Objects;
 import javax.persistence.Column;
@@ -11,8 +10,8 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "holidays")
-public class Holiday implements Serializable {
+@Table(name = "process_days")
+public class ProcessDay extends BaseJson {
 
     private static final long serialVersionUID = 1L;
 
@@ -21,11 +20,14 @@ public class Holiday implements Serializable {
     @Column(name = "pk", nullable = false)
     private Long id = null;
 
-    @Column(name = "holiday", nullable = false, unique = true)
-    private LocalDate holiday = LocalDate.now();
+    @Column(name = "today", nullable = false, unique = true)
+    private LocalDate today = LocalDate.now();
 
     @Column(name = "description")
     private String description = null;
+
+    @Column(name = "holiday")
+    private boolean holiday = false;
 
     public Long getId() {
         return id;
@@ -35,12 +37,12 @@ public class Holiday implements Serializable {
         this.id = id;
     }
 
-    public LocalDate getHoliday() {
-        return holiday;
+    public LocalDate getToday() {
+        return today;
     }
 
-    public void setHoliday(LocalDate holiday) {
-        this.holiday = holiday;
+    public void setToday(LocalDate today) {
+        this.today = today;
     }
 
     public String getDescription() {
@@ -51,10 +53,18 @@ public class Holiday implements Serializable {
         this.description = description;
     }
 
+    public boolean isHoliday() {
+        return holiday;
+    }
+
+    public void setHoliday(boolean holiday) {
+        this.holiday = holiday;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 11 * hash + Objects.hashCode(this.id);
+        int hash = 3;
+        hash = 47 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -69,7 +79,7 @@ public class Holiday implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Holiday other = (Holiday) obj;
+        final ProcessDay other = (ProcessDay) obj;
         return Objects.equals(this.id, other.id);
     }
 }
