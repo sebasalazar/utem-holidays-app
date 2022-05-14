@@ -18,6 +18,7 @@
 
     <properties>
         <java.version>11</java.version>
+        <springdoc.version>1.6.8</springdoc.version>
     </properties>
 
     <dependencies>
@@ -28,6 +29,12 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>${springdoc.version}</version>
         </dependency>
 
         <dependency>
