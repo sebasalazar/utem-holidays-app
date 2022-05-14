@@ -2,7 +2,7 @@ package cl.utem.cpyd.holiday.api.vo;
 
 import java.time.LocalDateTime;
 
-public class ErrorVO {
+public class ErrorVO extends BaseJson {
 
     public boolean ok = false;
     public String message = null;

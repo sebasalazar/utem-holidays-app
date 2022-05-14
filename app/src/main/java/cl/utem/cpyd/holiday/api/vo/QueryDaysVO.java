@@ -6,7 +6,7 @@ import java.time.LocalDate;
  *
  * @author seba
  */
-public class QueryDaysVO {
+public class QueryDaysVO extends BaseJson {
 
     private LocalDate start = null;
     private LocalDate end = null;
