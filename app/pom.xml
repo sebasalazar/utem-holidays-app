@@ -18,7 +18,7 @@
 
     <properties>
         <java.version>11</java.version>
-        <springdoc.version>1.6.8</springdoc.version>
+        <springdoc.version>1.6.9</springdoc.version>
         <validator.version>1.7</validator.version>
         <maven.test.skip>true</maven.test.skip>
     </properties>

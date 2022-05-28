@@ -30,7 +30,7 @@ public class DayManager implements Serializable {
      * @param end Fecha de término
      * @return La cantidad de días hábiles entre ambas fechas
      */
-    public Long getWorkingDays(final LocalDate start, final LocalDate end) {
+    public Long countWorkingDays(final LocalDate start, final LocalDate end) {
         return dayRepository.countByHolidayAndWorkingDateBetween(false, start, end);
     }
 

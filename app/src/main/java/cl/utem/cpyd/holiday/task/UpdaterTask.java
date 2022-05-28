@@ -67,6 +67,8 @@ public class UpdaterTask implements Serializable {
     @Scheduled(cron = "0 3 2 1,15 * ?")
     public void holidayProcess() {
         try {
+//            @Scheduled(cron = "0 15 12 * * ?")
+
             /// Proyección a 10 años
             tenYears();
 
