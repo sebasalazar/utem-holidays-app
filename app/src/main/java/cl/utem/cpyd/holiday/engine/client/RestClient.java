@@ -15,6 +15,7 @@ import okhttp3.Dispatcher;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 import okhttp3.ResponseBody;
 import org.apache.commons.lang3.StringUtils;
@@ -51,7 +52,7 @@ public class RestClient implements Serializable {
     /**
      * Media Type para Json (usado en POST)
      */
-    private static final MediaType JSON = MediaType.parse("application/json");
+    private static final MediaType JSON = MediaType.parse(JSON_MIME);
     /**
      * Cantidad de peticiones concurrentes
      */
@@ -70,7 +71,7 @@ public class RestClient implements Serializable {
     /**
      * Cliente HTTP/HTTPS
      */
-    private OkHttpClient client = null;
+    private transient OkHttpClient client = null;
 
     /**
      * Validador de url con soporte para url locales
@@ -154,10 +155,48 @@ public class RestClient implements Serializable {
                 } else {
                     LOGGER.error("[GET] url       : '{}'", url);
                     LOGGER.error("[GET] Código    : '{}'", response.code());
-                    LOGGER.error("[GET] respuesta : '{}'", body.string());
+                    if (body != null) {
+                        LOGGER.error("[GET] respuesta : '{}'", body.string());
+                    }
                 }
             }
         }
         return json;
+    }
+
+    /**
+     * Esta función realiza una operación POST sobre la URL, no conserva el
+     * estado HTTP
+     *
+     * @param url URL a la que solicitar la información
+     * @param jsonRequest Json de la petición
+     * @return json de la respuesta
+     * @throws IOException
+     */
+    public String post(final String url, final String jsonRequest) throws IOException {
+        String jsonResponse = StringUtils.EMPTY;
+        if (URL_VALIDATOR.isValid(url)) {
+            RequestBody requestBody = RequestBody.create(jsonRequest, JSON);
+            Request request = new Request.Builder()
+                    .url(url)
+                    .addHeader("User-Agent", USER_AGENT)
+                    .addHeader("Accept", JSON_MIME)
+                    .addHeader("Content-Type", JSON_MIME)
+                    .cacheControl(CacheControl.FORCE_NETWORK)
+                    .post(requestBody)
+                    .build();
+            try ( Response response = client.newCall(request).execute();  ResponseBody responseBody = response.body()) {
+                if (responseBody != null) {
+                    if (response.isSuccessful()) {
+                        jsonResponse = StringUtils.trimToEmpty(responseBody.string());
+                    } else {
+                        LOGGER.error("[POST] url:   : '{}'", url);
+                        LOGGER.error("[POST] Código : '{}'", response.code());
+                        LOGGER.error("[POST] Cuerpo : '{}'", StringUtils.trimToEmpty(responseBody.string()));
+                    }
+                }
+            }
+        }
+        return jsonResponse;
     }
 }

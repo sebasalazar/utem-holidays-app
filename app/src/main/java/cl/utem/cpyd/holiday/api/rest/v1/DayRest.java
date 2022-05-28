@@ -4,6 +4,7 @@ import cl.utem.cpyd.holiday.api.vo.QueryRequestVO;
 import cl.utem.cpyd.holiday.api.vo.QueryResponseVO;
 import cl.utem.cpyd.holiday.exception.ApiException;
 import cl.utem.cpyd.holiday.manager.DayManager;
+import java.io.Serializable;
 import java.time.LocalDate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -19,7 +20,9 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping(value = "/v1/days", consumes = {MediaType.APPLICATION_JSON_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-public class DayRest {
+public class DayRest implements Serializable {
+
+    private static final long serialVersionUID = 1L;
 
     @Autowired
     private transient DayManager dayManager;

@@ -47,6 +47,7 @@ public class DayManager implements Serializable {
             created = dayRepository.findByWorkingDate(day.getWorkingDate());
             if (created == null) {
                 created = dayRepository.saveAndFlush(day);
+                LOGGER.trace("Día persistido: '{}'", created);
             }
         }
         return created;

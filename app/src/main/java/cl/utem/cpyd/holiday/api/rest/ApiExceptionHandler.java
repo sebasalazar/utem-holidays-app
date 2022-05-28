@@ -20,8 +20,8 @@ public class ApiExceptionHandler {
 
     @ExceptionHandler({ApiException.class})
     public ResponseEntity<ErrorVO> handleException(ApiException ae) {
-        LOGGER.error("Error no manejado en el API: {}", ae.getMessage());
-        LOGGER.trace("Error no manejado en el API: {}", ae.getMessage(), ae);
+        LOGGER.error("Error manejado en el API: {}", ae.getMessage());
+        LOGGER.trace("Error manejado en el API: {}", ae.getMessage(), ae);
 
         return new ResponseEntity<>(new ErrorVO(ae.getMessage()), HttpStatus.PRECONDITION_FAILED);
     }
