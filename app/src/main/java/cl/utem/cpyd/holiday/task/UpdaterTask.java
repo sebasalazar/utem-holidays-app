@@ -34,6 +34,11 @@ public class UpdaterTask implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UpdaterTask.class);
 
+    /**
+     * Se busca proyectar a 10 años, los posibles valores de los días, de tal
+     * manera que al momento de realizar las consultas REST estos valores
+     * existan y la complejidad del cálculo se reduzca.
+     */
     private void tenYears() {
         try {
             final YearMonth ym = YearMonth.now();
