@@ -10,7 +10,6 @@ import java.time.LocalDate;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.PostConstruct;
 import org.apache.commons.collections.CollectionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -35,17 +34,7 @@ public class UpdaterTask implements Serializable {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UpdaterTask.class);
 
-    @PostConstruct
-    public void initTask() {
-        try {
-            tenYears();
-        } catch (Exception e) {
-            LOGGER.error("Error al iniciar tarea: {}", e.getMessage());
-            LOGGER.debug("Error al iniciar tarea: {}", e.getMessage(), e);
-        }
-    }
-
-    public void tenYears() {
+    private void tenYears() {
         try {
             final YearMonth ym = YearMonth.now();
             final LocalDate end = LocalDate.of(ym.getYear() + 10, 12, 31);
@@ -73,6 +62,9 @@ public class UpdaterTask implements Serializable {
     @Scheduled(cron = "0 3 2 1,15 * ?")
     public void holidayProcess() {
         try {
+            /// Proyección a 10 años
+            tenYears();
+
             final String url = "https://apis.digital.gob.cl/fl/feriados";
             final String json = restClient.get(url);
 
