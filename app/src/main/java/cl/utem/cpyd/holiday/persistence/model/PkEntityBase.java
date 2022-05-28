@@ -1,18 +1,21 @@
 package cl.utem.cpyd.holiday.persistence.model;
 
-import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.Objects;
 import javax.persistence.Column;
-import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.MappedSuperclass;
 
-@Entity
-@Table(name = "holidays")
-public class Holiday implements Serializable {
+/**
+ * Clase base que contiene la información transversal a todos los objetos del
+ * sistema.
+ *
+ * @author seba
+ */
+@MappedSuperclass
+public class PkEntityBase extends Utem {
 
     private static final long serialVersionUID = 1L;
 
@@ -21,11 +24,11 @@ public class Holiday implements Serializable {
     @Column(name = "pk", nullable = false)
     private Long id = null;
 
-    @Column(name = "holiday", nullable = false, unique = true)
-    private LocalDate holiday = LocalDate.now();
+    @Column(name = "created", nullable = false)
+    private OffsetDateTime created = OffsetDateTime.now();
 
-    @Column(name = "description")
-    private String description = null;
+    @Column(name = "updated", nullable = false)
+    private OffsetDateTime updated = OffsetDateTime.now();
 
     public Long getId() {
         return id;
@@ -35,26 +38,26 @@ public class Holiday implements Serializable {
         this.id = id;
     }
 
-    public LocalDate getHoliday() {
-        return holiday;
+    public OffsetDateTime getCreated() {
+        return created;
     }
 
-    public void setHoliday(LocalDate holiday) {
-        this.holiday = holiday;
+    public void setCreated(OffsetDateTime created) {
+        this.created = created;
     }
 
-    public String getDescription() {
-        return description;
+    public OffsetDateTime getUpdated() {
+        return updated;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setUpdated(OffsetDateTime updated) {
+        this.updated = updated;
     }
 
     @Override
     public int hashCode() {
-        int hash = 7;
-        hash = 11 * hash + Objects.hashCode(this.id);
+        int hash = 3;
+        hash = 53 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -69,7 +72,7 @@ public class Holiday implements Serializable {
         if (getClass() != obj.getClass()) {
             return false;
         }
-        final Holiday other = (Holiday) obj;
+        final PkEntityBase other = (PkEntityBase) obj;
         return Objects.equals(this.id, other.id);
     }
 }

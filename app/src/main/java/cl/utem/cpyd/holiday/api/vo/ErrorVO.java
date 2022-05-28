@@ -1,12 +1,27 @@
 package cl.utem.cpyd.holiday.api.vo;
 
-import java.time.LocalDateTime;
+import cl.utem.cpyd.holiday.persistence.model.Utem;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 
-public class ErrorVO {
+/**
+ *
+ * @author seba
+ */
+@Schema(name = "Error")
+@JsonInclude(JsonInclude.Include.NON_EMPTY)
+public class ErrorVO extends Utem {
 
-    public boolean ok = false;
-    public String message = null;
-    public LocalDateTime created = LocalDateTime.now();
+    @Schema(description = "Flag que indica el resultado de la operación, por defecto en false", example = "false", required = true)
+    private boolean ok = false;
+
+    @Schema(description = "Glosa descriptiva del error", example = "No fue posible conectarse al motor de base de datos", required = true)
+    private String message = null;
+
+    @Schema(description = "Fecha de creación del objeto")
+    private OffsetDateTime created = OffsetDateTime.now(ZoneOffset.UTC);
 
     public ErrorVO() {
     }
@@ -14,7 +29,7 @@ public class ErrorVO {
     public ErrorVO(String message) {
         this.ok = false;
         this.message = message;
-        this.created = LocalDateTime.now();
+        this.created = OffsetDateTime.now(ZoneOffset.UTC);
     }
 
     public boolean isOk() {
@@ -33,11 +48,11 @@ public class ErrorVO {
         this.message = message;
     }
 
-    public LocalDateTime getCreated() {
+    public OffsetDateTime getCreated() {
         return created;
     }
 
-    public void setCreated(LocalDateTime created) {
+    public void setCreated(OffsetDateTime created) {
         this.created = created;
     }
 }
