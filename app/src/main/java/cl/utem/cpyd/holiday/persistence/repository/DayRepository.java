@@ -1,12 +1,17 @@
 package cl.utem.cpyd.holiday.persistence.repository;
 
-import cl.utem.cpyd.holiday.persistence.model.Holiday;
+import cl.utem.cpyd.holiday.persistence.model.Day;
 import java.time.LocalDate;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
+/**
+ *
+ * @author seba
+ */
 @Repository
-public interface HolidayRepository extends JpaRepository<Holiday, Long> {
+public interface DayRepository extends JpaRepository<Day, Long> {
 
-    public Holiday findByHoliday(LocalDate holiday);
+    public Day findByWorkingDate(LocalDate workingDate);
+
 }
