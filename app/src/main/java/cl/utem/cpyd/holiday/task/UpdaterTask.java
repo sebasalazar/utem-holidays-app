@@ -4,13 +4,14 @@ import cl.utem.cpyd.holiday.engine.client.RestClient;
 import cl.utem.cpyd.holiday.engine.vo.GobHolidayVO;
 import cl.utem.cpyd.holiday.manager.DayManager;
 import cl.utem.cpyd.holiday.persistence.model.Day;
+import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.Serializable;
 import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.YearMonth;
-import java.util.ArrayList;
 import java.util.List;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -53,7 +54,7 @@ public class UpdaterTask implements Serializable {
                 currentDay.setHoliday(holiday);
                 Day create = dayManager.create(currentDay);
                 if (create != null) {
-                    LOGGER.info("La fecha {} fue creada con ID {}", current, create.getId());
+                    LOGGER.info("[DB] La fecha {} fue creada con ID {}", current, create.getId());
                 }
 
                 current = current.plusDays(1);
@@ -67,24 +68,37 @@ public class UpdaterTask implements Serializable {
     @Scheduled(cron = "0 3 2 1,15 * ?")
     public void holidayProcess() {
         try {
-//            @Scheduled(cron = "0 15 12 * * ?")
-
-            /// Proyección a 10 años
+            /**
+             * Realizamos una proyección a 10 años, ante el improbable escenario
+             * de una consulta tan extensa.
+             */
             tenYears();
 
+            // Url del servicio que tiene la información de feriados.
             final String url = "https://apis.digital.gob.cl/fl/feriados";
+
+            // Consulta de Feriados
             final String json = restClient.get(url);
 
-            List<GobHolidayVO> holidays = new ArrayList<>();
-            holidays = RestClient.MAPPER.readValue(json, holidays.getClass());
-            if (CollectionUtils.isNotEmpty(holidays)) {
-                for (GobHolidayVO holiday : holidays) {
-                    Day day = new Day();
-                    day.setWorkingDate(holiday.getDate());
-                    day.setHoliday(true);
-                    Day create = dayManager.create(day);
-                    if (create != null) {
-                        LOGGER.info("La fecha {} fue creada con ID {}", create.getWorkingDate(), create.getId());
+            // Verificamos que exista información, el json no está en blanco.
+            if (StringUtils.isNotBlank(json)) {
+                // Le indicamos a Jackson que la respuesta esperada es una lista de objetos GobHolidayVO
+
+                TypeReference<List<GobHolidayVO>> typeReference = new TypeReference<List<GobHolidayVO>>() {
+                };
+
+                // Transformamos el string json, en un arreglo de objetos
+                List<GobHolidayVO> holidays = RestClient.MAPPER.readValue(json, typeReference);
+                if (CollectionUtils.isNotEmpty(holidays)) {
+                    // Iteramos sobre la información encontrada
+                    for (GobHolidayVO holiday : holidays) {
+                        Day day = new Day();
+                        day.setWorkingDate(holiday.getDate());
+                        day.setHoliday(true);
+                        Day create = dayManager.create(day);
+                        if (create != null) {
+                            LOGGER.info("[GOB] La fecha {} fue creada con ID {}", create.getWorkingDate(), create.getId());
+                        }
                     }
                 }
             }
